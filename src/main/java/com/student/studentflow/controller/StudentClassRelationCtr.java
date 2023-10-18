@@ -16,8 +16,8 @@ public class StudentClassRelationCtr {
 
 
     @PostMapping
-    public ResponseEntity<StudentClassRelation> createRelation(@RequestParam Long idStudent, Long idRegistration, Long idClassroom){
-        return new ResponseEntity<>(service.createRelation, HttpStatus.OK);
+    public ResponseEntity<StudentClassRelation> createRelation(@RequestParam Long idStudent,@RequestParam  Long idRegistration,@RequestParam  Long idClassroom){
+        return new ResponseEntity<>(service.createRelation(idStudent,idRegistration,idClassroom), HttpStatus.OK);
     }
 
 }

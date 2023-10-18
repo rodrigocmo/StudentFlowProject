@@ -1,32 +1,46 @@
 package com.student.studentflow.external;
 
 import com.student.studentflow.db.Classroom;
+import com.student.studentflow.exception.GenericExeption;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-
 @Configuration
 public class RestTemplateRequests {
 
+    @Autowired
+    RestTemplate restTemplate;
 
-    RestTemplate restTemplate = new RestTemplate(getClientHttpRequestFactory());
-
-    @Value("${endpoint.cep}")
+    @Value("${endpoint.vacancies}")
     private String endpoint;
 
-    ResponseEntity<Classroom> response
-            = restTemplate.getForEntity(endpoint + "/1", Classroom.class);
 
+    public ResponseEntity<Long> findVacancies(Long idClassroom){
+        ResponseEntity<Long> response
+                = restTemplate.getForEntity(endpoint + "/" + idClassroom, Long.class);
 
-    HttpEntity<List<Integer>> request = new HttpEntity<>(List.of(1, 2));
-    Integer test = restTemplate.postForObject(endpoint, request, Integer.class);
+        if(!response.getStatusCode().equals(HttpStatus.OK)){
+            throw new GenericExeption("Service unavailable");
+        }
+
+        return response;
+    }
+    public void test(){
+        HttpEntity<List<Integer>> request = new HttpEntity<>(List.of(1, 2));
+        Integer test = restTemplate.postForObject(endpoint, request, Integer.class);
+    }
 
     private ClientHttpRequestFactory getClientHttpRequestFactory() {
         int timeout = 5000;
