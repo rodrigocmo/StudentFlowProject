@@ -11,12 +11,17 @@ import org.springframework.stereotype.Component;
 public class KafkaProducerMessage {
 
     @Autowired
-    private KafkaTemplate<String, Student> kafkaTemplate;
+    private KafkaTemplate<String, Long> kafkaTemplate;
 
-    private final String KAFKA_TOPIC = "student-info-topic";
+    private final String INCREASE_TOPIC = "student-increase-topic";
 
-    public void sendMessage(Student student){
-        kafkaTemplate.send(KAFKA_TOPIC, student);
+    private final String DECREASE_TOPIC = "student-decrease-topic";
+    public void increaseStudentNumberInClass(Long idClassroom ){
+        kafkaTemplate.send(INCREASE_TOPIC, idClassroom);
+    }
+
+    public void decreaseStudentNumberInClass(Long idClassroom ){
+        kafkaTemplate.send(DECREASE_TOPIC, idClassroom);
     }
 
 }

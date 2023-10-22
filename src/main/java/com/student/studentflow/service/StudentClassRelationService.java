@@ -7,6 +7,7 @@ import com.student.studentflow.db.Student;
 import com.student.studentflow.db.StudentClassRelation;
 import com.student.studentflow.exception.GenericExeption;
 import com.student.studentflow.external.RestTemplateRequests;
+import com.student.studentflow.message.KafkaProducerMessage;
 import com.student.studentflow.repository.studentclassrelation.StudentClassRelationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +22,16 @@ public class StudentClassRelationService {
     @Autowired
     RestTemplateRequests rest;
 
+    @Autowired
+    KafkaProducerMessage kafka;
+
     public StudentClassRelation createRelation(Long idStudent, Long idRegistration, Long idClassroom){
         if(rest.findVacancies(idClassroom).getBody() <= Long.valueOf(0)) {
             throw new GenericExeption("No vacancies left in this classroom");
         }
+
+        kafka.increaseStudentNumberInClass(idClassroom);
+
        return repository.save(StudentClassRelation.builder()
                .student(Student.builder().idStudent(idStudent).build())
                .registration(Registration.builder().idRegistration(idRegistration).build())
