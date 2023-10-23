@@ -4,11 +4,13 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
+import org.springframework.kafka.annotation.EnableKafka;
 
 import java.util.TimeZone;
 
 @EnableEurekaServer
 @SpringBootApplication
+@EnableKafka
 /*
 @EnableJpaRepositories("com.college.repository.*")
 @ComponentScan({"com.college.*"})
